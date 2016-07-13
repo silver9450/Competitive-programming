@@ -46,6 +46,7 @@ int main()
         int usable;
         int same[50];
         vect university[50];
+        bool a_line = true;
         bool ans[50];
         cin >> n;
         usable = n;
@@ -81,6 +82,7 @@ int main()
                     bool first_l = true;
                     plane ijk = cross(university[j] - university[i], university[k] - university[i]);
                     if(ijk.x == 0 && ijk.y == 0 && ijk.z == 0) continue;
+                    else a_line = false;
                     standard = dot(ijk, university[k]);
                     for(int l = 0; l < n; ++l)
                     {
@@ -105,7 +107,7 @@ int main()
                 }
             }
         }
-        if(usable <= 3) for(int i = 0; i < n; ++i) cout << 'T';
+        if(usable <= 3 || a_line) for(int i = 0; i < n; ++i) cout << 'T';
         else
         {
             for(int i = 0; i < n; ++i)

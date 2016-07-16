@@ -1,0 +1,103 @@
+/* http://icpc.iisf.or.jp/past-icpc/domestic2015/contest/all_en.html#section_D */
+
+#include<iostream>
+
+using namespace std;
+
+struct store
+{
+    int price, rest;
+};
+
+int max_n;
+int c[100][1000];
+store s[100];
+
+int knapsack(int n, int w)
+{
+    if(w < 0) return -1e9;
+    if(n == -1) return 0;
+
+    if(c[n][w]) return c[n][w];
+
+    if((knapsack(n - 1, w - s[n].rest) + s[n].price) >= knapsack(n - 1, w))
+    {
+        max_n = max(max_n, n);
+        return c[n][w] = knapsack(n - 1, w - s[n].rest) + s[n].price;
+    }
+    else return c[n][w] = knapsack(n - 1, w);
+}
+
+int main()
+{
+    cin.sync_with_stdio(false);
+    cin.tie(NULL);
+    while(1)
+    {
+        int n;
+        int gohyaku, change;
+        int last, min_last;
+        int skip;
+        int ans;
+        cin >> n;
+        if(n == 0) break;
+        else
+        {
+            ans = 0;
+            gohyaku = change = 0;
+            max_n = last = -1;
+            min_last = 1e9;
+            for(int i = 0; i < 100; ++i) for(int j = 0; j < 1000; ++j) c[i][j] = 0;
+            for(int i = 0; i < n; ++i)
+            {
+                store now;
+                cin >> now.price;
+                now.rest = (now.price * (-1)) % 1000;
+                if(now.rest != 0) now.rest += 1000;
+                s[i] = now;
+            }
+        }
+        for(int i = 0; i < n; ++i)
+        {
+            if(change >= 500)
+            {
+                gohyaku += (change / 500);
+                change %= 500;
+            }
+            if(i == 0)
+            {
+                gohyaku = s[i].rest / 500;
+                change = s[i].rest % 500;
+            }
+            else
+            {
+                if((s[i].price % 1000) == 0) ;
+                else if((s[i].price % 1000) <= 500)
+                {
+                    gohyaku++;
+                    change += (s[i].rest - 500);
+                }
+                else
+                {
+                    if((s[i].price % 1000) - 500 <= change)
+                    {
+                        gohyaku++;
+                        change -= (s[i].price - 500);
+                    }
+                    else change += s[i].rest;
+                }
+            }
+            if(change >= 500) last = i + 1;
+        }
+        skip = knapsack(n - 1, change);
+        for(int i = 0; i < n; ++i) ans += s[i].price;
+        ans -= skip;
+        if(last != -1 && last != n && max_n <= last)
+        {
+            for(int i = last; i < n; ++i) min_last = min(min_last, s[i].price);
+            ans += min_last;
+        }
+        cout << gohyaku << " " << ans << endl;
+    }
+    return 0;
+}

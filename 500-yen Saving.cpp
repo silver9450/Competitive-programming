@@ -80,7 +80,7 @@ int main()
                     if((s[i].price % 1000) - 500 <= change)
                     {
                         gohyaku++;
-                        change -= (s[i].price - 500);
+                        change -= ((s[i].price % 1000) - 500);
                     }
                     else change += s[i].rest;
                 }

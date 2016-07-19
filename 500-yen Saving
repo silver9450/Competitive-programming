@@ -1,6 +1,8 @@
 /* http://icpc.iisf.or.jp/past-icpc/domestic2015/contest/all_en.html#section_D */
 
 #include<iostream>
+#include<algorithm>
+#include<cstring>
 
 using namespace std;
 
@@ -10,22 +12,19 @@ struct store
 };
 
 int max_n;
-int c[100][1000];
+int c[1000];
 store s[100];
 
 int knapsack(int n, int w)
 {
-    if(w < 0) return -1e9;
-    if(n == -1) return 0;
-
-    if(c[n][w]) return c[n][w];
-
-    if((knapsack(n - 1, w - s[n].rest) + s[n].price) >= knapsack(n - 1, w))
+    memset(c, 0, sizeof(c));
+    for(int i = 0; i < n; ++i)
     {
-        max_n = max(max_n, n);
-        return c[n][w] = knapsack(n - 1, w - s[n].rest) + s[n].price;
+        int weight = s[i].rest;
+        int cost = s[i].price;
+        for(int j = w; (j - weight) >= 0; --j) c[j] = max(c[j], c[j - weight] + cost);
     }
-    else return c[n][w] = knapsack(n - 1, w);
+    return c[w];
 }
 
 int main()
@@ -47,7 +46,6 @@ int main()
             gohyaku = change = 0;
             max_n = last = -1;
             min_last = 1e9;
-            for(int i = 0; i < 100; ++i) for(int j = 0; j < 1000; ++j) c[i][j] = 0;
             for(int i = 0; i < n; ++i)
             {
                 store now;
@@ -89,7 +87,7 @@ int main()
             }
             if(change >= 500) last = i + 1;
         }
-        skip = knapsack(n - 1, change);
+        skip = knapsack(n, change);
         for(int i = 0; i < n; ++i) ans += s[i].price;
         ans -= skip;
         if(last != -1 && last != n && max_n <= last)

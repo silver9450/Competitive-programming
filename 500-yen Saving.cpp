@@ -11,18 +11,25 @@ struct store
     int price, rest;
 };
 
-int max_n;
+int after_last;
 int c[1000];
 store s[100];
 
-int knapsack(int n, int w)
+int knapsack(int n, int w, int last)
 {
     memset(c, 0, sizeof(c));
     for(int i = 0; i < n; ++i)
     {
         int weight = s[i].rest;
         int cost = s[i].price;
-        for(int j = w; (j - weight) >= 0; --j) c[j] = max(c[j], c[j - weight] + cost);
+        for(int j = w; (j - weight) >= 0; --j)
+        {
+            if(c[j - weight] + cost >= c[j])
+            {
+                if(i >= last) after_last++;
+                c[j] = c[j - weight] + cost;
+            }
+        }
     }
     return c[w];
 }
@@ -44,7 +51,8 @@ int main()
         {
             ans = 0;
             gohyaku = change = 0;
-            max_n = last = -1;
+            last = -1;
+            after_last = 0;
             min_last = 1e9;
             for(int i = 0; i < n; ++i)
             {
@@ -69,28 +77,28 @@ int main()
             }
             else
             {
-                if((s[i].price % 1000) == 0) ;
-                else if((s[i].price % 1000) <= 500)
+                if(s[i].rest == 0) ;
+                else if(s[i].rest >= 500)
                 {
                     gohyaku++;
                     change += (s[i].rest - 500);
                 }
                 else
                 {
-                    if((s[i].price % 1000) - 500 <= change)
+                    if((500 - s[i].rest) <= change)
                     {
                         gohyaku++;
-                        change -= ((s[i].price % 1000) - 500);
+                        change -= (500 - s[i].rest);
                     }
                     else change += s[i].rest;
                 }
             }
             if(change >= 500) last = i + 1;
         }
-        skip = knapsack(n, change);
+        skip = knapsack(n, change, last);
         for(int i = 0; i < n; ++i) ans += s[i].price;
         ans -= skip;
-        if(last != -1 && last != n && max_n <= last)
+        if((last != -1) && (last != n) && (after_last == n - last))
         {
             for(int i = last; i < n; ++i) min_last = min(min_last, s[i].price);
             ans += min_last;

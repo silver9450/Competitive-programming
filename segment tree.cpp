@@ -1,3 +1,8 @@
+/*
+https://oj.nctu.me/groups/2/contests/1021/problems/10078/
+最後少做一件事情TLE了QQ 不過segment tree是測過沒問題會動的
+*/
+
 #include<cstdio>
 #include<vector>
 

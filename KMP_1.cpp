@@ -1,3 +1,4 @@
+/* KMP algorithm with the fail function of S printed (takes more space in order to keep record) */
 #include <iostream>
 #include <vector>
 

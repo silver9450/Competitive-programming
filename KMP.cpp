@@ -9,7 +9,7 @@ vector<int> s_fail, j_fail;
 
 void half_KMP(string& s, string& j, vector<int>& s_fail, vector<int>& j_fail)
 {
-    j_fail.push_back(-1);
+    if((&s) == (&j)) j_fail.push_back(-1);
     for(int i = 0; i < (int)s.size(); ++i)
     {
         if(i == 0 && (&s) == (&j)) continue;

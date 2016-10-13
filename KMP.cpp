@@ -9,15 +9,15 @@ vector<int> fail;
 
 void half_KMP(string& s, string& j, vector<int>& fail)
 {
-    bool build_fail = ((&s) == (&j));
-    if(build_fail) fail.push_back(-1);
+    bool build = ((&s) == (&j));
+    if(build) fail.push_back(-1);
     for(int i = 0, fail_bit = -1; i < (int)s.size(); ++i)
     {
-        if(i == 0 && build_fail) continue;
+        if(i == 0 && build) continue;
         while(s[i] != j[fail_bit + 1] && (fail_bit >= 0)) fail_bit = fail[fail_bit];
         if(s[i] == j[fail_bit + 1]) fail_bit++;
-        if(build_fail) fail.push_back(fail_bit);
-        if(!build_fail && fail_bit == (int)(j.size() - 1))
+        if(build) fail.push_back(fail_bit);
+        if(!build && fail_bit == (int)(j.size() - 1))
         {
             match_point.push_back(i - j.size() + 1);
             fail_bit = fail[fail_bit];

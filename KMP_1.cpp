@@ -10,16 +10,15 @@ vector<int> s_fail, j_fail;
 
 void half_KMP(string& s, string& j, vector<int>& s_fail, vector<int>& j_fail)
 {
-    if((&s) == (&j)) j_fail.push_back(-1);
-    for(int i = 0; i < (int)s.size(); ++i)
+    bool build = ((&s) == (&j));
+    if(build) j_fail.push_back(-1);
+    for(int i = 0, fail_bit = -1; i < (int)s.size(); ++i)
     {
-        if(i == 0 && (&s) == (&j)) continue;
-        int fail_bit = (i == 0) ? -1 : s_fail[i - 1];
+        if(i == 0 && build) continue;
         while(s[i] != j[fail_bit + 1] && (fail_bit >= 0)) fail_bit = j_fail[fail_bit];
         if(s[i] == j[fail_bit + 1]) fail_bit++;
-        else fail_bit = -1;
         s_fail.push_back(fail_bit);
-        if((&s) != (&j) && fail_bit == (int)(j.size() - 1))
+        if(!build && fail_bit == (int)(j.size() - 1))
         {
             match_point.push_back(i - j.size() + 1);
             fail_bit = j_fail[fail_bit];
@@ -46,3 +45,4 @@ int main()
     cout << endl;
     return 0;
 }
+

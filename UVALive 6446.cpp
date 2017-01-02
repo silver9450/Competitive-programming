@@ -44,38 +44,20 @@ int main()
     {
         int n;
         int usable;
-        int same[50];
         vect university[50];
         bool a_line = true;
         bool ans[50];
         cin >> n;
         usable = n;
         for(int i = 0; i < n; ++i) cin >> university[i].x >> university[i].y >> university[i].z;
-        for(int i = 0; i < n; ++i)
-        {
-            same[i] = -1;
-            ans[i] = false;
-        }
+        for(int i = 0; i < n; ++i) ans[i] = false;
+        for(int i = 0; i < n; ++i) for(int j = i + 1; j < n; ++j) if(university[j] == university[i]) usable--;
         for(int i = 0; i < n; ++i)
         {
             for(int j = i + 1; j < n; ++j)
             {
-                if(same[j] == -1 && university[j] == university[i])
-                {
-                    same[j] = i;
-                    usable--;
-                }
-            }
-        }
-        for(int i = 0; i < n; ++i)
-        {
-            if(same[i] != -1) continue;
-            for(int j = i + 1; j < n; ++j)
-            {
-                if(same[j] != -1) continue;
                 for(int k = j + 1; k < n; ++k)
                 {
-                    if(same[k] != -1) continue;
                     int standard;
                     bool same_side = true;
                     bool positive = true;
@@ -86,7 +68,7 @@ int main()
                     standard = dot(ijk, university[k]);
                     for(int l = 0; l < n; ++l)
                     {
-                        if(l != i && l != j && l != k && same[l] == -1)
+                        if(l != i && l != j && l != k)
                         {
                             int product = dot(ijk, university[l]);
                             if(first_l)
@@ -108,14 +90,7 @@ int main()
             }
         }
         if(usable <= 3 || a_line) for(int i = 0; i < n; ++i) cout << 'T';
-        else
-        {
-            for(int i = 0; i < n; ++i)
-            {
-                if(same[i] == -1) cout << (ans[i] ? 'T' : 'F');
-                else cout << (ans[same[i]] ? 'T' : 'F');
-            }
-        }
+        else for(int i = 0; i < n; ++i) cout << (ans[i] ? 'T' : 'F');
         cout << endl;
     }
     return 0;

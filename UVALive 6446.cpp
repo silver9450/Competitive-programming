@@ -15,11 +15,6 @@ struct vect
         ans.z = z - next.z;
         return ans;
     }
-    bool operator==(vect& comp)
-    {
-        if(x == comp.x && y == comp.y && z == comp.z) return true;
-        else return false;
-    }
 };
 
 vect cross(vect a, vect b)
@@ -51,7 +46,6 @@ int main()
         usable = n;
         for(int i = 0; i < n; ++i) cin >> university[i].x >> university[i].y >> university[i].z;
         for(int i = 0; i < n; ++i) ans[i] = false;
-        for(int i = 0; i < n; ++i) for(int j = i + 1; j < n; ++j) if(university[j] == university[i]) usable--;
         for(int i = 0; i < n; ++i)
         {
             for(int j = i + 1; j < n; ++j)
